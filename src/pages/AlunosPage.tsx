@@ -1,0 +1,22 @@
+import useRecuperarAlunos from "../hooks/useRecuperarAlunos";
+
+const AlunosPage = () => {
+  const { data: alunos, isLoading, error } = useRecuperarAlunos();
+
+  if (isLoading) return <div>Carregando alunos...</div>;
+  if (error) return <div>Erro ao carregar alunos</div>;
+
+  return (
+    <div>
+      <h2>Lista de Alunos</h2>
+      <ul className="list-group">
+        {alunos?.map((a) => (
+          <li key={a.id} className="list-group-item">
+            <strong>{a.nome}</strong> — {a.email}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+export default AlunosPage;
