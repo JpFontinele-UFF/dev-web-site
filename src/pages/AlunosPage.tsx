@@ -4,7 +4,13 @@ const AlunosPage = () => {
   const { data: alunos, isLoading, error } = useRecuperarAlunos();
 
   if (isLoading) return <div>Carregando alunos...</div>;
-  if (error) return <div>Erro ao carregar alunos</div>;
+  if (error)
+    return (
+      <div>
+        <h3>Erro ao carregar alunos</h3>
+        <pre style={{ color: "red" }}>{String(error.message)}</pre>
+      </div>
+    );
 
   return (
     <div>
