@@ -5,7 +5,13 @@ const TurmasPage = () => {
   const { data: turmas, isLoading, error } = useRecuperarTurmas();
 
   if (isLoading) return <div>Carregando turmas...</div>;
-  if (error) return <div>Erro ao carregar turmas</div>;
+  if (error)
+    return (
+      <div>
+        <h3>Erro ao carregar turmas</h3>
+        <pre style={{ color: "red" }}>{String(error.message)}</pre>
+      </div>
+    );
 
   return (
     <div>
