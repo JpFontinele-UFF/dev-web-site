@@ -76,6 +76,7 @@ const TurmasPesquisaPage = () => {
                     <th>id</th>
                     <th>nome</th>
                     <th>email</th>
+                    <th>cpf</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -84,6 +85,7 @@ const TurmasPesquisaPage = () => {
                       <td>{i.aluno?.id ?? "-"}</td>
                       <td>{i.aluno?.nome ?? "-"}</td>
                       <td>{i.aluno?.email ?? "-"}</td>
+                      <td>{i.aluno?.cpf ?? "-"}</td>
                     </tr>
                   ))}
                 </tbody>

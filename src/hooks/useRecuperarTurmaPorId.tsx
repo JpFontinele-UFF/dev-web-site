@@ -36,7 +36,12 @@ const recuperarTurmaPorId = async (id: number) => {
         inscricoes: Array.isArray(data.alunos)
           ? data.alunos.map((a: any, idx: number) => ({
               id: a.id ?? idx,
-              aluno: { id: a.id, nome: a.nome, email: a.email },
+              aluno: {
+                id: a.id,
+                nome: a.nome,
+                email: a.email,
+                cpf: typeof a.cpf === "string" && a.cpf.length > 0 ? a.cpf : "-"
+              },
               dataHora: new Date().toISOString(),
             }))
           : [],
@@ -44,6 +49,16 @@ const recuperarTurmaPorId = async (id: number) => {
       return mapped;
     }
 
+    // Garante que o campo cpf exista em cada aluno, mesmo no retorno padrão
+    if (Array.isArray(data.inscricoes)) {
+      data.inscricoes = data.inscricoes.map((i: any) => ({
+        ...i,
+        aluno: {
+          ...i.aluno,
+          cpf: typeof i.aluno?.cpf === "string" && i.aluno?.cpf.length > 0 ? i.aluno.cpf : "-"
+        }
+      }));
+    }
     return data as Turma;
   } catch (err: unknown) {
     if (err instanceof Error) throw err;
