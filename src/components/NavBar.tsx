@@ -40,6 +40,12 @@ const NavBar = () => {
                 Listar Alunos
               </NavLink>
             </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/pesquisar-turmas">
+                <i className="bi bi-search me-1"></i>
+                Pesquisar Turmas
+              </NavLink>
+            </li>
           </ul>
         </div>
       </div>

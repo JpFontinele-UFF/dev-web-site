@@ -4,6 +4,7 @@ import HomePage from "../pages/HomePage";
 import TurmasPage from "../pages/TurmasPage";
 import TurmaPage from "../pages/TurmaPage";
 import AlunosPage from "../pages/AlunosPage";
+import TurmasPesquisaPage from "../pages/TurmasPesquisaPage";
 import Layout from "./Layout";
 
 const router = createBrowserRouter([
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
             {path: "listar-turmas", element: <TurmasPage />},
             {path: "turmas/:id", element: <TurmaPage />},
             {path: "listar-alunos", element: <AlunosPage />},
+            {path: "pesquisar-turmas", element: <TurmasPesquisaPage />},
             {path: "produtos/:id", element: <HomePage />},
         ]
     }

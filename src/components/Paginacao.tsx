@@ -8,7 +8,7 @@ interface Props {
 const Paginacao = ({ pagina, totalDePaginas, tratarPaginacao }: Props) => {
   const arrayDePaginas: ReactNode[] = [];
 
-  if (totalDePaginas < 2) return;
+  // Sempre exibe o passador, mesmo com uma página
 
   for (let i = 0; i < totalDePaginas; i++) {
     arrayDePaginas.push(
