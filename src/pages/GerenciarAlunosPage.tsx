@@ -25,12 +25,10 @@ const GerenciarAlunosPage = () => {
   const { data: turmaCompleta, isLoading: carregandoTurma } =
     useRecuperarTurmaPorId(turmaIdNumerico);
 
-  useMemo(() => (turmaCompleta as any)?.inscricoes ?? [], [turmaCompleta]);
-
   const turmaCodigo = useMemo(() => {
     const t = turmaCompleta as any;
     if (!t) return null;
-    return t.codigo ?? t.code ?? t.codigoTurma ?? String(t.id);
+    return t.codigoTurma;
   }, [turmaCompleta]);
 
   const [grupoLocal, setGrupoLocal] = useState<number[]>([]);
@@ -80,11 +78,16 @@ const GerenciarAlunosPage = () => {
           onChange={(e) => setTurmaSelecionada(e.target.value)}
         >
           <option value="">Selecione uma turma</option>
-          {turmas?.map((t: TurmaParaDropdown) => (
-            <option key={t.id} value={t.id}>
-              {t.codigo || t.disciplina?.nome} — {t.ano}/{t.periodo}
-            </option>
-          ))}
+          {turmas?.map((t: TurmaParaDropdown) => {
+            // prefer codigoTurma when available, fall back to codigo
+            const codigoTurma = (t as any).codigoTurma ?? t.codigo ?? "";
+            const disciplinaNome = t.disciplina?.nome ?? "";
+            return (
+              <option key={t.id} value={t.id}>
+                {codigoTurma}{codigoTurma && disciplinaNome ? " — " : ""}{disciplinaNome} — {t.ano}/{t.periodo}
+              </option>
+            );
+          })}
         </select>
       </div>
 

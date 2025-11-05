@@ -14,11 +14,11 @@ const TurmasPesquisaPage = () => {
   const { data: turmas, isLoading: turmasLoading, error: turmasError } = useRecuperarTurmas();
   const { data: turma, isLoading: turmaLoading, error: turmaError } = useRecuperarTurmaPorId(turmaSelecionada ?? 0);
 
-  // Filtra turmas pelo nome da disciplina ou id
+  // Filtra turmas pelo código da turma (codigoTurma ou codigo) ou id
   const turmasFiltradas = pesquisa
     ? (turmas ?? []).filter(t => {
-        const nome = t.disciplina?.nome ?? "";
-        return nome.toLowerCase().includes(pesquisa.toLowerCase()) || String(t.id).toLowerCase().includes(pesquisa.toLowerCase());
+        const codigoTurma = ((t as any).codigoTurma ?? (t as any).codigo ?? "").toString();
+        return codigoTurma.toLowerCase().includes(pesquisa.toLowerCase()) || String(t.id).toLowerCase().includes(pesquisa.toLowerCase());
       })
     : [];
 
@@ -44,16 +44,20 @@ const TurmasPesquisaPage = () => {
           {turmasLoading && <div>Carregando turmas...</div>}
           {turmasError && <div>Erro ao carregar turmas</div>}
           <ul className="list-group">
-            {turmasFiltradas.map(t => (
-              <li
-                key={t.id}
-                className={`list-group-item${turmaSelecionada === t.id ? " active" : ""}`}
-                style={{ cursor: "pointer" }}
-                onClick={() => handleSelecionarTurma(t.id)}
-              >
-                {t.disciplina?.nome ?? t.id}
-              </li>
-            ))}
+            {turmasFiltradas.map(t => {
+              const codigoTurma = ((t as any).codigoTurma ?? (t as any).codigo ?? "").toString();
+              const nomeDisciplina = t.disciplina?.nome ?? t.id;
+              return (
+                <li
+                  key={t.id}
+                  className={`list-group-item${turmaSelecionada === t.id ? " active" : ""}`}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleSelecionarTurma(t.id)}
+                >
+                  {codigoTurma ? `${codigoTurma} — ${nomeDisciplina}` : nomeDisciplina}
+                </li>
+              );
+            })}
           </ul>
         </div>
         <div className="col-9">

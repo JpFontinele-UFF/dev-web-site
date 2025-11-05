@@ -21,6 +21,7 @@ const recuperarTurmaPorId = async (id: number) => {
 
     if (data.disciplinaNome || data.professorNome || data.alunos) {
       const mapped = {
+        codigoTurma: data.codigoTurma ?? data.codigo ?? undefined,
         id: data.id,
         ano: data.ano,
         periodo: data.periodo,
