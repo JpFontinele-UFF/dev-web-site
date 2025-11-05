@@ -1,12 +1,14 @@
 import { NavLink } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import logo from "../assets/facul.png";
 
 const NavBar = () => {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container">
-        <NavLink className="navbar-brand" to="/">
-          Faculdade
+        <NavLink className="navbar-brand d-flex align-items-center" to="/">
+          <img src={logo} alt="Logo" style={{ height: 32 }} className="me-2" />
+          <span>Faculdade</span>
         </NavLink>
         <button
           className="navbar-toggler"
