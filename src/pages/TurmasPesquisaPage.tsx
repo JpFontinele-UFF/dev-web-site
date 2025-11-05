@@ -9,7 +9,7 @@ const TurmasPesquisaPage = () => {
   const [pesquisa, setPesquisa] = useState("");
   const [turmaSelecionada, setTurmaSelecionada] = useState<number | null>(null);
   const [pagina, setPagina] = useState(0);
-  const alunosPorPagina = 10;
+  const alunosPorPagina = 5;
 
   const { data: turmas, isLoading: turmasLoading, error: turmasError } = useRecuperarTurmas();
   const { data: turma, isLoading: turmaLoading, error: turmaError } = useRecuperarTurmaPorId(turmaSelecionada ?? 0);
@@ -72,7 +72,11 @@ const TurmasPesquisaPage = () => {
           ) : turma ? (
             <div>
               <h5>
-                Ano: {turma.ano} Período: {turma.periodo} Disc: {turma.disciplina?.nome} Prof: {turma.professor?.nome}
+                Ano: {turma.ano} Período: {turma.periodo} {' '}
+                {turma.codigoTurma ?? (turma as any).codigo ? (
+                  <span>Cod: {turma.codigoTurma ?? (turma as any).codigo} — </span>
+                ) : null}
+                Disc: {turma.disciplina?.nome} Prof: {turma.professor?.nome}
               </h5>
               <table className="table table-bordered">
                 <thead>

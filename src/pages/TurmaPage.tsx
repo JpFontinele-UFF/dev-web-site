@@ -11,12 +11,13 @@ const TurmaPage = () => {
     if (!turma) return <div>Turma não encontrada</div>;
 
     const disciplinaNome = turma.disciplina?.nome ?? (turma as any).disciplinaNome ?? "";
+    const codigoTurma = turma.codigoTurma ?? (turma as any).codigo ?? "";
     const professorNome = turma.professor?.nome ?? (turma as any).professorNome ?? "";
     const professorEmail = turma.professor?.email ?? (turma as any).professorEmail ?? "";
 
     return (
         <div>
-            <h2>Turma: {disciplinaNome}</h2>
+            <h2>Turma: {codigoTurma ? `${codigoTurma} — ${disciplinaNome}` : disciplinaNome}</h2>
             <p>
                 <strong>Ano:</strong> {turma.ano} <br />
                 <strong>Período:</strong> {turma.periodo}
