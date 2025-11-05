@@ -3,7 +3,6 @@ import useRecuperarTurmas from "../hooks/useRecuperarTurmas";
 import useRecuperarTurmaPorId from "../hooks/useRecuperarTurmaPorId";
 import useRecuperarAlunos from "../hooks/useRecuperarAlunos";
 
-// Tipagem da turma (para o dropdown)
 interface TurmaParaDropdown {
   id: number;
   codigo?: string;
@@ -79,7 +78,6 @@ const GerenciarAlunosPage = () => {
         >
           <option value="">Selecione uma turma</option>
           {turmas?.map((t: TurmaParaDropdown) => {
-            // prefer codigoTurma when available, fall back to codigo
             const codigoTurma = (t as any).codigoTurma ?? t.codigo ?? "";
             const disciplinaNome = t.disciplina?.nome ?? "";
             return (
