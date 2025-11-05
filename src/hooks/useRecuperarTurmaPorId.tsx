@@ -19,8 +19,6 @@ const recuperarTurmaPorId = async (id: number) => {
     let data = json?.data ?? json;
     if (!data) throw new Error(`Turma não encontrada: ${id}`);
 
-    // If backend returns flat fields (disciplinaNome, professorNome, alunos),
-    // map them into the application's expected Turma shape.
     if (data.disciplinaNome || data.professorNome || data.alunos) {
       const mapped = {
         id: data.id,
@@ -37,18 +35,13 @@ const recuperarTurmaPorId = async (id: number) => {
         },
         inscricoes: Array.isArray(data.alunos)
           ? data.alunos.map((a: any, idx: number) => ({
-              //
-              // 👇 AQUI ESTÁ A CORREÇÃO NO HOOK
-              // O 'id' da inscrição é o 'a.inscricaoId' do DTO
-              //
-              id: a.inscricaoId ?? idx, // ANTES: a.id ?? idx
+              id: a.inscricaoId ?? idx, 
               aluno: {
                 id: a.id,
                 nome: a.nome,
                 email: a.email,
                 cpf:
                   typeof a.cpf === "string" && a.cpf.length > 0 ? a.cpf : "-",
-                // Passa o inscricaoId para frente
                 inscricaoId: a.inscricaoId, 
               },
               dataHora: new Date().toISOString(),
@@ -80,7 +73,6 @@ const recuperarTurmaPorId = async (id: number) => {
 
 const useRecuperarTurmaPorId = (id: number) => {
   return useQuery<Turma, Error>({
-    // A chave correta é ["turmas", id]
     queryKey: ["turmas", id],
     queryFn: () => recuperarTurmaPorId(id),
     staleTime: 10_000,

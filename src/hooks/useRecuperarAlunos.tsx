@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import type { Aluno } from "../interfaces/Aluno";
 
-// Use relative path so the Vite dev proxy (configured in vite.config.ts) is applied during development
 const API_URL = "/alunos";
 
 const useRecuperarAlunos = () => {
@@ -11,7 +10,6 @@ const useRecuperarAlunos = () => {
       try {
         const res = await fetch(API_URL);
         if (!res.ok) {
-          // include response body when available for easier debugging
           let bodyText = "";
           try {
             bodyText = await res.text();
@@ -28,7 +26,6 @@ const useRecuperarAlunos = () => {
         }
         return data as Aluno[];
       } catch (err: unknown) {
-        // Normalize error message
         if (err instanceof Error) throw err;
         throw new Error(String(err));
       }

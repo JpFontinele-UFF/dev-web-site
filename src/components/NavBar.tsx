@@ -51,7 +51,7 @@ const NavBar = () => {
               </NavLink>
             </li>
 
-            {/* 👇 Novo item do menu */}
+            {/*Novo item do menu */}
             <li className="nav-item">
               <NavLink className="nav-link" to="/gerenciar-alunos">
                 <i className="bi bi-person-gear me-1"></i>

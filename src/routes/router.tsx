@@ -5,9 +5,8 @@ import TurmasPage from "../pages/TurmasPage.tsx";
 import TurmaPage from "../pages/TurmaPage.tsx";
 import AlunosPage from "../pages/AlunosPage.tsx";
 import TurmasPesquisaPage from "../pages/TurmasPesquisaPage.tsx";
-// 👇 CORREÇÃO APLICADA AQUI
 import GerenciarAlunosPage from "../pages/GerenciarAlunosPage.tsx";
-import Layout from "./Layout.tsx"; // Também adicionei .tsx aqui por segurança
+import Layout from "./Layout.tsx"; 
 
 const router = createBrowserRouter([
   {
@@ -20,7 +19,6 @@ const router = createBrowserRouter([
       { path: "turmas/:id", element: <TurmaPage /> },
       { path: "listar-alunos", element: <AlunosPage /> },
       { path: "pesquisar-turmas", element: <TurmasPesquisaPage /> },
-      { path: "produtos/:id", element: <HomePage /> },
       { path: "gerenciar-alunos", element: <GerenciarAlunosPage /> },
     ],
   },

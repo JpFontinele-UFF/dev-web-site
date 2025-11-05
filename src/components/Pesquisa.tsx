@@ -1,10 +1,6 @@
-// interface Props {
-//     tratarPesquisa: (nome: string) => void;
-
 import _ from "lodash";
 import type { ChangeEvent } from "react";
 
-// }
 const Pesquisa = ({ tratarPesquisa }: { tratarPesquisa: (nome: string) => void; }) => {
   const debouncedFunction = _.debounce((novoNome: string) => tratarPesquisa(novoNome), 1000);  
 
