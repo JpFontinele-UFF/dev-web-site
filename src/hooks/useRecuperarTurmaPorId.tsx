@@ -11,7 +11,9 @@ const recuperarTurmaPorId = async (id: number) => {
       try {
         body = await res.text();
       } catch {}
-      throw new Error(`Failed to fetch turma ${id}: ${res.status} ${res.statusText} ${body}`);
+      throw new Error(
+        `Failed to fetch turma ${id}: ${res.status} ${res.statusText} ${body}`
+      );
     }
     const json = await res.json();
     let data = json?.data ?? json;
@@ -35,12 +37,19 @@ const recuperarTurmaPorId = async (id: number) => {
         },
         inscricoes: Array.isArray(data.alunos)
           ? data.alunos.map((a: any, idx: number) => ({
-              id: a.id ?? idx,
+              //
+              // 👇 AQUI ESTÁ A CORREÇÃO NO HOOK
+              // O 'id' da inscrição é o 'a.inscricaoId' do DTO
+              //
+              id: a.inscricaoId ?? idx, // ANTES: a.id ?? idx
               aluno: {
                 id: a.id,
                 nome: a.nome,
                 email: a.email,
-                cpf: typeof a.cpf === "string" && a.cpf.length > 0 ? a.cpf : "-"
+                cpf:
+                  typeof a.cpf === "string" && a.cpf.length > 0 ? a.cpf : "-",
+                // Passa o inscricaoId para frente
+                inscricaoId: a.inscricaoId, 
               },
               dataHora: new Date().toISOString(),
             }))
@@ -55,8 +64,11 @@ const recuperarTurmaPorId = async (id: number) => {
         ...i,
         aluno: {
           ...i.aluno,
-          cpf: typeof i.aluno?.cpf === "string" && i.aluno?.cpf.length > 0 ? i.aluno.cpf : "-"
-        }
+          cpf:
+            typeof i.aluno?.cpf === "string" && i.aluno?.cpf.length > 0
+              ? i.aluno.cpf
+              : "-",
+        },
       }));
     }
     return data as Turma;
@@ -68,6 +80,7 @@ const recuperarTurmaPorId = async (id: number) => {
 
 const useRecuperarTurmaPorId = (id: number) => {
   return useQuery<Turma, Error>({
+    // A chave correta é ["turmas", id]
     queryKey: ["turmas", id],
     queryFn: () => recuperarTurmaPorId(id),
     staleTime: 10_000,
