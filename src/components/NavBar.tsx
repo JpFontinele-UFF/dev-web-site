@@ -47,6 +47,12 @@ const NavBar = () => {
               </NavLink>
             </li>
             <li className="nav-item">
+              <NavLink className="nav-link" to="/cadastro-alunos">
+                <i className="bi bi-person-plus me-1"></i>
+                Cadastro de Alunos
+              </NavLink>
+            </li>
+            <li className="nav-item">
               <NavLink className="nav-link" to="/pesquisar-turmas">
                 <i className="bi bi-search me-1"></i>
                 Pesquisar Turmas
@@ -56,6 +62,12 @@ const NavBar = () => {
               <NavLink className="nav-link" to="/gerenciar-alunos">
                 <i className="bi bi-person-gear me-1"></i>
                 Gerenciar Alunos
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/inscricao">
+                <i className="bi bi-card-checklist me-1"></i>
+                Inscrição
               </NavLink>
             </li>
           </ul>

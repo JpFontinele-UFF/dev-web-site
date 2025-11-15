@@ -11,6 +11,10 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.1",
+    "@hookform/resolvers": "^3.4.0",
+    "react-hook-form": "^7.45.0",
+    "zod": "^3.23.0",
+    "zustand": "^4.4.0",
     "@types/lodash": "^4.17.20",
     "axios": "^1.13.1",
     "bootstrap": "^5.3.8",
