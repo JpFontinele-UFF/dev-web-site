@@ -14,7 +14,7 @@ const alunoSchema = z.object({
 
 type FormData = z.infer<typeof alunoSchema>
 
-const AlunoForm = ({ initial }: { initial?: Partial<Aluno> }) => {
+const AlunoForm = ({ initial, onSaved }: { initial?: Partial<Aluno>, onSaved?: (aluno: Aluno) => void }) => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(alunoSchema),
     defaultValues: initial as any,
@@ -28,8 +28,11 @@ const AlunoForm = ({ initial }: { initial?: Partial<Aluno> }) => {
 
   const onSubmit = async (data: FormData) => {
     try {
-      await cadastrar.mutateAsync(data)
-      alert('Aluno salvo com sucesso')
+      const result = await cadastrar.mutateAsync(data)
+      const saved = (result?.data ?? result) as Aluno
+      if (onSaved && saved) onSaved(saved)
+      const msg = (result?.message ?? 'Aluno salvo com sucesso') as string
+      alert(msg)
     } catch (err: any) {
       alert('Erro ao salvar: ' + (err?.message ?? String(err)))
     }
