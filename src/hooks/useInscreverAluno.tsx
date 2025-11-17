@@ -21,7 +21,6 @@ const useInscreverAluno = () => {
       return json
     },
     onSuccess: (_, vars) => {
-      // invalida queries relacionadas à turma e aos alunos
       qc.invalidateQueries({ queryKey: ['turmas', vars.turmaId] })
       qc.invalidateQueries({ queryKey: ['turmas', 'porDisciplina'] })
       qc.invalidateQueries({ queryKey: ['turmas', vars.turmaId, 'alunos-nao-inscritos'] })

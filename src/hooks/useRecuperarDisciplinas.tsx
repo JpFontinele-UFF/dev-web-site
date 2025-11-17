@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import type { Disciplina } from '../interfaces/Disciplina'
 
-const API = '/api/disciplinas'
+const API = '/disciplinas'
 
 const useRecuperarDisciplinas = () => {
   return useQuery<Disciplina[], Error>({

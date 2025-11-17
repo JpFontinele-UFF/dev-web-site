@@ -52,7 +52,6 @@ const recuperarTurmaPorId = async (id: number) => {
       return mapped;
     }
 
-    // Garante que o campo cpf exista em cada aluno, mesmo no retorno padrão
     if (Array.isArray(data.inscricoes)) {
       data.inscricoes = data.inscricoes.map((i: any) => ({
         ...i,

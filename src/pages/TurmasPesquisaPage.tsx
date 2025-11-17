@@ -14,7 +14,7 @@ const TurmasPesquisaPage = () => {
   const { data: turmas, isLoading: turmasLoading, error: turmasError } = useRecuperarTurmas();
   const { data: turma, isLoading: turmaLoading, error: turmaError } = useRecuperarTurmaPorId(turmaSelecionada ?? 0);
 
-  // Filtra turmas pelo código da turma (codigoTurma ou codigo) ou id
+  // Filtra turmas pelo código da turma (codigoTurma ou id)
   const turmasFiltradas = pesquisa
     ? (turmas ?? []).filter(t => {
         const codigoTurma = ((t as any).codigoTurma ?? (t as any).codigo ?? "").toString();

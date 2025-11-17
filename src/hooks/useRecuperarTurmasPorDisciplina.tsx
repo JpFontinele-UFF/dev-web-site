@@ -10,14 +10,12 @@ const useRecuperarTurmasPorDisciplina = (disciplinaId: number | null) => {
       if (!disciplinaId) return []
       const res = await fetch(`${API_BASE}?disciplinaId=${disciplinaId}`)
       if (!res.ok) {
-        // try to still get data for client-side filtering
         const body = await res.text().catch(() => '')
         throw new Error(`Failed to fetch turmas por disciplina: ${res.status} ${body}`)
       }
       const json = await res.json()
       const data = (json?.data ?? json) as Turma[]
 
-      // Caso o backend não tenha aplicado o filtro corretamente, aplica filtro no cliente
       const filtradas = data.filter((t) => {
         const discId = (t as any)?.disciplina?.id ?? (t as any)?.disciplinaId ?? null
         return discId === disciplinaId

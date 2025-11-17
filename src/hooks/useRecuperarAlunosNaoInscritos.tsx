@@ -9,7 +9,6 @@ const useRecuperarAlunosNaoInscritos = (turmaId: number | null) => {
     queryFn: async () => {
       if (!turmaId) return []
 
-      // Tenta endpoint direto /turmas/{id}/alunos-nao-inscritos
       try {
         const direct = await fetch(`${TURMAS_API}/${turmaId}/alunos-nao-inscritos`)
         if (direct.ok) {
@@ -20,7 +19,6 @@ const useRecuperarAlunosNaoInscritos = (turmaId: number | null) => {
         // fallthrough para strategy de fallback
       }
 
-      // Fallback: buscar turma para obter os inscritos, e todos os alunos, então filtrar
       const turmaRes = await fetch(`${TURMAS_API}/${turmaId}`)
       if (!turmaRes.ok) {
         const body = await turmaRes.text().catch(() => '')
