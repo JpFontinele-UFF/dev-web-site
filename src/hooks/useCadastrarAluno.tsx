@@ -15,8 +15,26 @@ const useCadastrarAluno = () => {
         body: JSON.stringify(payload),
       })
       if (!res.ok) {
-        const body = await res.text().catch(() => '')
-        throw new Error(`Failed to salvar aluno: ${res.status} ${body}`)
+        let message = ''
+        try {
+          const contentType = res.headers.get('content-type') || ''
+          if (contentType.includes('application/json')) {
+            const bodyJson = await res.json().catch(() => null)
+            if (bodyJson) {
+              message = bodyJson.message ?? bodyJson.error ?? bodyJson.mensagem ?? JSON.stringify(bodyJson)
+            } else {
+              message = await res.text().catch(() => '')
+            }
+          } else {
+            message = await res.text().catch(() => '')
+          }
+        } catch (e) {
+          message = ''
+        }
+        if (message && message.trim().length > 0) {
+          throw new Error(message)
+        }
+        throw new Error(`Ocorreu um erro ao salvar aluno: ${res.status}`)
       }
       const json = await res.json()
       qc.invalidateQueries({ queryKey: ['alunos'] })
