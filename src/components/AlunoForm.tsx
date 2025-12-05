@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import useCadastrarAluno from '../hooks/useCadastrarAluno'
 import type { Aluno } from '../interfaces/Aluno'
 import { useEffect } from 'react'
+import useAuthStore from '../store/useAuthStore'
 
 const alunoSchema = z.object({
   id: z.number().optional(),
@@ -25,6 +26,7 @@ const AlunoForm = ({ initial, onSaved }: { initial?: Partial<Aluno>, onSaved?: (
   }, [initial, reset])
 
   const cadastrar = useCadastrarAluno()
+  const isAdmin = useAuthStore((s) => s.isAdmin())
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -58,7 +60,8 @@ const AlunoForm = ({ initial, onSaved }: { initial?: Partial<Aluno>, onSaved?: (
         {errors.cpf && <div className="text-danger">{String(errors.cpf.message)}</div>}
       </div>
 
-      <button className="btn btn-primary" type="submit">Salvar</button>
+      <button className="btn btn-primary" type="submit" disabled={!isAdmin()}>Salvar</button>
+      {!isAdmin() && <div className="form-text text-muted mt-2">Apenas usuários com perfil ADMIN podem cadastrar/editar alunos.</div>}
     </form>
   )
 }

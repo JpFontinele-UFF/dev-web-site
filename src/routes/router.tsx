@@ -9,6 +9,8 @@ import GerenciarAlunosPage from "../pages/GerenciarAlunosPage.tsx";
 import CadastroDeAlunosPage from "../pages/CadastroDeAlunosPage.tsx";
 import AlunoPage from "../pages/AlunoPage.tsx";
 import InscricaoPage from "../pages/InscricaoPage.tsx";
+import LoginPage from "../pages/LoginPage.tsx";
+import RegisterUserPage from "../pages/RegisterUserPage.tsx";
 import Layout from "./Layout.tsx"; 
 
 const router = createBrowserRouter([
@@ -21,6 +23,8 @@ const router = createBrowserRouter([
       { path: "listar-turmas", element: <TurmasPage /> },
       { path: "turmas/:id", element: <TurmaPage /> },
       { path: "listar-alunos", element: <AlunosPage /> },
+      { path: "login", element: <LoginPage /> },
+      { path: "cadastrar-usuario", element: <RegisterUserPage /> },
       { path: "cadastro-alunos", element: <CadastroDeAlunosPage /> },
       { path: "alunos/:id", element: <AlunoPage /> },
       { path: "inscricao", element: <InscricaoPage /> },
