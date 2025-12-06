@@ -78,6 +78,12 @@ const NavBar = () => {
               </NavLink>
             </li>
             <li className="nav-item">
+              <NavLink className="nav-link" to="/remover-alunos">
+                <i className="bi bi-person-dash me-1"></i>
+                Remover Alunos
+              </NavLink>
+            </li>
+            <li className="nav-item">
               <NavLink className="nav-link" to="/inscricao">
                 <i className="bi bi-card-checklist me-1"></i>
                 Inscrição

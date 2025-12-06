@@ -12,6 +12,7 @@ import InscricaoPage from "../pages/InscricaoPage.tsx";
 import LoginPage from "../pages/LoginPage.tsx";
 import RegisterPage from "../pages/RegisterPage.tsx";
 import CadastroDeUsuariosPage from "../pages/CadastroDeUsuariosPage.tsx";
+import RemoverAlunosPage from "../pages/RemoverAlunosPage.tsx";
 import Layout from "./Layout.tsx"; 
 
 const router = createBrowserRouter([
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
       { path: "pesquisar-turmas", element: <TurmasPesquisaPage /> },
       { path: "gerenciar-alunos", element: <GerenciarAlunosPage /> },
       { path: "cadastro-usuarios", element: <CadastroDeUsuariosPage /> },
+      { path: "remover-alunos", element: <RemoverAlunosPage /> },
     ],
   },
 ]);
