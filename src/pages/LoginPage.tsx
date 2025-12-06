@@ -15,7 +15,14 @@ const LoginPage = () => {
     const params = new URLSearchParams(location.search);
     if (params.get("registered") === "1") {
       setSuccess("Cadastro realizado com sucesso. Faça login.");
-      // limpa query da URL sem recarregar
+      window.history.replaceState({}, document.title, location.pathname);
+    }
+    if (params.get("authRequired") === "1") {
+      setError("Necessário estar autenticado para acessar este recurso.");
+      window.history.replaceState({}, document.title, location.pathname);
+    }
+    if (params.get("noPermission") === "1") {
+      setError("Você não tem permissão para acessar este recurso.");
       window.history.replaceState({}, document.title, location.pathname);
     }
   }, [location]);

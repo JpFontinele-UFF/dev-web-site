@@ -3,21 +3,36 @@ import useRecuperarAlunos from "../hooks/useRecuperarAlunos";
 import useRemoverAluno from "../hooks/useRemoverAluno";
 import { useAuth } from "../store/AuthContext";
 
+import { useNavigate } from "react-router-dom";
+
 const RemoverAlunosPage = () => {
   const { auth } = useAuth();
   const { data: alunos, isLoading, error } = useRecuperarAlunos();
   const { mutateAsync: removerAluno, isPending } = useRemoverAluno();
   const [feedback, setFeedback] = useState<string | null>(null);
+  const navigate = useNavigate();
 
+  // Verifica se está autenticado
+  const isAuthenticated = !!auth?.token;
   const temPerfilAdmin = (auth?.roles ?? []).some((r) => r === "ADMIN" || r === "ROLE_ADMIN");
 
+
+
   const handleRemover = async (id: number, nome: string) => {
+    if (!isAuthenticated) {
+      navigate("/login?authRequired=1", { replace: true });
+      return;
+    }
+    if (!temPerfilAdmin) {
+      navigate("/login?noPermission=1", { replace: true });
+      return;
+    }
     setFeedback(null);
-    const confirmar = window.confirm(`Deseja remover o aluno "${nome}"?`);
+    const confirmar = window.confirm(`Deseja remover o aluno \"${nome}\"?`);
     if (!confirmar) return;
     try {
       await removerAluno(id);
-      setFeedback(`Aluno "${nome}" removido com sucesso.`);
+      setFeedback(`Aluno \"${nome}\" removido com sucesso.`);
     } catch (err: any) {
       if (err?.status === 403) {
         setFeedback("Remoção não autorizada (403). Apenas ADMIN pode remover alunos.");
