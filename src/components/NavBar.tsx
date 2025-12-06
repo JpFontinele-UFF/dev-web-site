@@ -83,6 +83,14 @@ const NavBar = () => {
                 Inscrição
               </NavLink>
             </li>
+            {(roles.includes("ADMIN") || roles.includes("ROLE_ADMIN")) && (
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/cadastro-usuarios">
+                  <i className="bi bi-person-badge me-1"></i>
+                  Cadastro de Usuários
+                </NavLink>
+              </li>
+            )}
           </ul>
 
           <ul className="navbar-nav ms-3">
