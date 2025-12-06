@@ -15,7 +15,7 @@ const alunoSchema = z.object({
 type FormData = z.infer<typeof alunoSchema>
 
 const AlunoForm = ({ initial, onSaved }: { initial?: Partial<Aluno>, onSaved?: (aluno: Aluno) => void }) => {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, reset, setError, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(alunoSchema),
     defaultValues: initial as any,
   })
@@ -34,6 +34,32 @@ const AlunoForm = ({ initial, onSaved }: { initial?: Partial<Aluno>, onSaved?: (
       const msg = (result?.message ?? 'Aluno salvo com sucesso') as string
       alert(msg)
     } catch (err: any) {
+      // Se o servidor retornou erros de validação estruturados em `err.validation` (campo -> mensagem), mapeia para o formulário
+      if (err && err.validation && typeof err.validation === 'object') {
+        const v = err.validation as Record<string,string>
+        Object.entries(v).forEach(([field, message]) => {
+          try {
+            setError(field as any, { type: 'server', message: String(message) })
+          } catch {
+            // campo desconhecido: ignora aqui
+          }
+        })
+        return
+      }
+
+      // Fallback: alguns backends (ou versões atuais) retornam apenas uma mensagem texto
+      // Ex.: { message: "Email já cadastrado" } ou apenas plain text. Detectamos casos comuns
+      // e mapeamos para o campo `email` quando fizer sentido.
+      const textMsg = String(err?.message ?? err?.body?.message ?? '')
+      const lower = textMsg.toLowerCase()
+      if (lower.includes('email') || lower.includes('e-mail')) {
+        if (lower.includes('já') || lower.includes('ja') || lower.includes('exist')) {
+          setError('email' as any, { type: 'server', message: textMsg || 'Email já cadastrado' })
+          return
+        }
+      }
+
+      // Se não conseguimos mapear para um campo, mostra mensagem genérica
       alert('Erro ao salvar: ' + (err?.message ?? String(err)))
     }
   }

@@ -1,5 +1,6 @@
 import AlunoForm from '../components/AlunoForm'
 import { useEffect, useState } from 'react'
+import { useAuth } from '../store/AuthContext'
 import type { Aluno } from '../interfaces/Aluno'
 import useRecuperarAlunos from '../hooks/useRecuperarAlunos'
 
@@ -10,6 +11,8 @@ const CadastroDeAlunosPage = () => {
   const [alunoParaEditar, setAlunoParaEditar] = useState<Aluno | null>(null)
 
   const { data: alunos = [], isLoading } = useRecuperarAlunos()
+  const { auth } = useAuth()
+  const isAdmin = (auth?.roles ?? []).some(r => String(r).toUpperCase().includes('ADMIN'))
 
   useEffect(() => {
     // limpa buscas quando muda modo
@@ -18,6 +21,10 @@ const CadastroDeAlunosPage = () => {
   }, [modo])
 
   const buscarPorCpf = () => {
+    if (!isAdmin) {
+      alert('Atenção: você não tem permissão para acessar esta ferramenta.')
+      return
+    }
     if (!cpfBusca) {
       alert('Informe o CPF para busca')
       return
@@ -44,7 +51,7 @@ const CadastroDeAlunosPage = () => {
       <div className="card p-3 mb-3">
         <div className="d-flex gap-2 mb-3">
           <button className="btn btn-outline-primary" onClick={() => setModo('incluir')}>Incluir</button>
-          <button className="btn btn-outline-secondary" onClick={() => setModo('alterar')}>Alterar</button>
+          <button className="btn btn-outline-secondary" onClick={() => setModo('alterar')} disabled={!isAdmin}>Alterar</button>
           <button className="btn btn-link" onClick={() => setModo(null)}>Fechar</button>
         </div>
 

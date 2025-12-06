@@ -28,8 +28,20 @@ export default function useRegister() {
         json = { message: text };
       }
       if (!res.ok) {
+        // Se o servidor retornar erros de validação no formato { errors: { field: message } }
+        if (json && typeof json === "object" && json.errors && typeof json.errors === "object") {
+          const validation = json.errors;
+          setLoading(false);
+          const err: any = new Error(json.message || "Validation failed");
+          err.validation = validation;
+          err.status = res.status;
+          throw err;
+        }
         const msg = json?.message || text || `Register failed: ${res.status}`;
-        throw new Error(msg);
+        setLoading(false);
+        const err: any = new Error(msg);
+        err.status = res.status;
+        throw err;
       }
       setLoading(false);
       // se a API já retornar token após registro, armazena-o; caso contrário apenas retorna

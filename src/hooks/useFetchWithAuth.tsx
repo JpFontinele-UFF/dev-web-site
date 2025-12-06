@@ -22,7 +22,15 @@ export default function useFetchWithAuth() {
         } catch {
           json = { message: text };
         }
-        throw new Error(json?.message || `Request failed: ${res.status}`);
+        const errMsg = json?.message || `Request failed: ${res.status}`;
+        const err: any = new Error(errMsg);
+        // preserve possible structured validation errors
+        if (json && typeof json === 'object') {
+          if (json.errors && typeof json.errors === 'object') err.validation = json.errors;
+          err.body = json;
+        }
+        err.status = res.status;
+        throw err;
       }
       const bodyText = await res.text();
       try {
