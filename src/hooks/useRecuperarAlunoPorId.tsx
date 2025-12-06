@@ -1,17 +1,15 @@
 import { useQuery } from '@tanstack/react-query'
 import type { Aluno } from '../interfaces/Aluno'
-
-const API = '/alunos'
+import useApi from './useApi'
 
 const useRecuperarAlunoPorId = (id: number | null) => {
+  const { getById } = useApi<Aluno>('/alunos')
   return useQuery<Aluno, Error>({
     queryKey: ['alunos', id],
     queryFn: async () => {
       if (!id) throw new Error('id inválido')
-      const res = await fetch(`${API}/${id}`)
-      if (!res.ok) throw new Error('Aluno não encontrado')
-      const json = await res.json()
-      return (json?.data ?? json) as Aluno
+      const aluno = await getById(id)
+      return (aluno as any)?.data ?? (aluno as any) ?? aluno
     },
     enabled: !!id,
   })

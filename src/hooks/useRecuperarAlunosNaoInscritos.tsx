@@ -1,41 +1,30 @@
 import { useQuery } from '@tanstack/react-query'
 import type { Aluno } from '../interfaces/Aluno'
-
-const TURMAS_API = '/turmas'
+import useApi from './useApi'
 
 const useRecuperarAlunosNaoInscritos = (turmaId: number | null) => {
+  const turmasApi = useApi<any>('/turmas')
+  const alunosApi = useApi<Aluno>('/alunos')
+
   return useQuery<Aluno[], Error>({
     queryKey: ['turmas', turmaId, 'alunos-nao-inscritos'],
     queryFn: async () => {
       if (!turmaId) return []
 
       try {
-        const direct = await fetch(`${TURMAS_API}/${turmaId}/alunos-nao-inscritos`)
-        if (direct.ok) {
-          const json = await direct.json()
-          return (json?.data ?? json) as Aluno[]
-        }
+        const direct = await turmasApi.getPath<Aluno[]>(`/${turmaId}/alunos-nao-inscritos`)
+        if (direct) return (direct as any)?.data ?? (direct as any) ?? (direct as Aluno[])
       } catch {
         // fallthrough para strategy de fallback
       }
 
-      const turmaRes = await fetch(`${TURMAS_API}/${turmaId}`)
-      if (!turmaRes.ok) {
-        const body = await turmaRes.text().catch(() => '')
-        throw new Error(`Failed to fetch turma ${turmaId}: ${turmaRes.status} ${body}`)
-      }
-      const turmaJson = await turmaRes.json()
-      const turmaData = turmaJson?.data ?? turmaJson
-      const inscricoes = Array.isArray(turmaData.inscricoes) ? turmaData.inscricoes : (turmaData.alunos ?? [])
+      const turmaData = await turmasApi.getById(turmaId)
+      const inscricoes = Array.isArray((turmaData as any)?.inscricoes)
+        ? (turmaData as any).inscricoes
+        : ((turmaData as any)?.alunos ?? [])
       const inscritosIds = new Set(inscricoes.map((i: any) => i.aluno?.id ?? i.id ?? i.inscricaoId ?? 0))
 
-      const allRes = await fetch('/alunos')
-      if (!allRes.ok) {
-        const body = await allRes.text().catch(() => '')
-        throw new Error(`Failed to fetch alunos: ${allRes.status} ${body}`)
-      }
-      const jsonAll = await allRes.json()
-      const all = (jsonAll?.data ?? jsonAll) as Aluno[]
+      const all = await alunosApi.list()
 
       return all.filter((a) => !inscritosIds.has(a.id))
     },

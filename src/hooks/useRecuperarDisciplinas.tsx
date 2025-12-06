@@ -1,25 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
 import type { Disciplina } from '../interfaces/Disciplina'
-
-const API = '/disciplinas'
+import useApi from './useApi'
 
 const useRecuperarDisciplinas = () => {
+  const { list } = useApi<Disciplina>('/disciplinas')
   return useQuery<Disciplina[], Error>({
     queryKey: ['disciplinas'],
     queryFn: async () => {
-      try {
-        const res = await fetch(API)
-        if (!res.ok) {
-          const body = await res.text().catch(() => '')
-          throw new Error(`Failed to fetch disciplinas: ${res.status} ${res.statusText} ${body}`)
-        }
-        const json = await res.json()
-        const data = json?.data ?? json
-        return data as Disciplina[]
-      } catch (err: unknown) {
-        if (err instanceof Error) throw err
-        throw new Error(String(err))
-      }
+      const data = await list()
+      return data as Disciplina[]
     },
     staleTime: 10000,
   })

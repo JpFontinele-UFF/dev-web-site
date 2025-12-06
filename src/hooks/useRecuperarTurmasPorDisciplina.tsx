@@ -1,20 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
 import type { Turma } from '../interfaces/Turma'
-
-const API_BASE = '/turmas'
+import useApi from './useApi'
 
 const useRecuperarTurmasPorDisciplina = (disciplinaId: number | null) => {
+  const { list } = useApi<Turma>('/turmas')
   return useQuery<Turma[], Error>({
     queryKey: ['turmas', 'porDisciplina', disciplinaId],
     queryFn: async () => {
       if (!disciplinaId) return []
-      const res = await fetch(`${API_BASE}?disciplinaId=${disciplinaId}`)
-      if (!res.ok) {
-        const body = await res.text().catch(() => '')
-        throw new Error(`Failed to fetch turmas por disciplina: ${res.status} ${body}`)
-      }
-      const json = await res.json()
-      const data = (json?.data ?? json) as Turma[]
+      const data = await list({ disciplinaId })
 
       const filtradas = data.filter((t) => {
         const discId = (t as any)?.disciplina?.id ?? (t as any)?.disciplinaId ?? null
