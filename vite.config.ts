@@ -29,6 +29,12 @@ export default defineConfig({
         secure: false,
         rewrite: (path) => path.replace(/^\/inscricoes/, '/inscricoes'),
       },
+      '/auth': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/auth/, '/auth'),
+      },
     },
   },
 })

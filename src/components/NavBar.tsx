@@ -1,8 +1,21 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import logo from "../assets/facul.png";
+import { useEffect, useState } from "react";
+import { useAuth } from "../store/AuthContext";
 
 const NavBar = () => {
+  const navigate = useNavigate();
+  const { auth, logout } = useAuth();
+  const token = auth?.token;
+  const roles = auth?.roles ?? [];
+  const nome = auth?.nome ?? auth?.email ?? null;
+
+  function handleLogout() {
+    logout();
+    navigate("/");
+  }
+
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container">
@@ -70,6 +83,28 @@ const NavBar = () => {
                 Inscrição
               </NavLink>
             </li>
+          </ul>
+
+          <ul className="navbar-nav ms-3">
+            {!token ? (
+              <>
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/login">Login</NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/register">Criar Conta</NavLink>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item d-flex align-items-center me-2">
+                  <span className="me-2">{nome}</span>
+                </li>
+                <li className="nav-item">
+                  <button className="btn btn-link nav-link" onClick={handleLogout}>Sair</button>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
