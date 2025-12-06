@@ -18,7 +18,6 @@ const InscricaoForm = () => {
       // limpar seleção de aluno para forçar recarga do combo
       setAlunoId(null)
     } catch (err) {
-      // swallow here; caller UI may show
       console.error(err)
     }
   }

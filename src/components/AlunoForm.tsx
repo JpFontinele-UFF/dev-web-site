@@ -41,15 +41,11 @@ const AlunoForm = ({ initial, onSaved }: { initial?: Partial<Aluno>, onSaved?: (
           try {
             setError(field as any, { type: 'server', message: String(message) })
           } catch {
-            // campo desconhecido: ignora aqui
           }
         })
         return
       }
 
-      // Fallback: alguns backends (ou versões atuais) retornam apenas uma mensagem texto
-      // Ex.: { message: "Email já cadastrado" } ou apenas plain text. Detectamos casos comuns
-      // e mapeamos para o campo `email` quando fizer sentido.
       const textMsg = String(err?.message ?? err?.body?.message ?? '')
       const lower = textMsg.toLowerCase()
       if (lower.includes('email') || lower.includes('e-mail')) {
@@ -59,7 +55,6 @@ const AlunoForm = ({ initial, onSaved }: { initial?: Partial<Aluno>, onSaved?: (
         }
       }
 
-      // Se não conseguimos mapear para um campo, mostra mensagem genérica
       alert('Erro ao salvar: ' + (err?.message ?? String(err)))
     }
   }

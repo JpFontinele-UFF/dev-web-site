@@ -15,7 +15,6 @@ const useRecuperarAlunosNaoInscritos = (turmaId: number | null) => {
         const direct = await turmasApi.getPath<Aluno[]>(`/${turmaId}/alunos-nao-inscritos`)
         if (direct) return (direct as any)?.data ?? (direct as any) ?? (direct as Aluno[])
       } catch {
-        // fallthrough para strategy de fallback
       }
 
       const turmaData = await turmasApi.getById(turmaId)
